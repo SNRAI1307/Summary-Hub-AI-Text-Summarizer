@@ -1,0 +1,21 @@
+{
+  "name": "stack5-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Next.js, Express, and PostgreSQL monorepo",
+  "workspaces": [
+    "backend",
+    "frontend",
+    "db"
+  ],
+  "scripts": {
+    "dev": "npm run dev:frontend & npm run dev:backend",
+    "dev:backend": "npm run dev --workspace=backend",
+    "dev:frontend": "npm run dev --workspace=frontend",
+    "db:migrate": "npm run migrate --workspace=db",
+    "test:backend": "npm run test --workspace=backend"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
