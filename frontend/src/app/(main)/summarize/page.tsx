@@ -9,10 +9,10 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Slider } from "@/components/ui/slider";
 import { Copy, Loader2, Sparkles, UploadCloud } from "lucide-react";
 import { useDropzone } from 'react-dropzone';
-import { GlobalWorkerOptions, getDocument } from 'pdfjs-dist';
 import { useToast } from "@/hooks/use-toast"; 
 
-
+// --- FIX: REMOVED pdfjs-dist IMPORTS FROM THE TOP ---
+// We will import them dynamically inside the functions
 
 const countWords = (text: string) => {
   if (!text.trim()) return 0;
@@ -52,12 +52,15 @@ export default function SummarizePage() {
   const { getToken } = useAuth();
   const { toast } = useToast(); 
 
-  // --- THIS IS THE FIX ---
-  // We move the worker setup into useEffect so it only runs on the client.
+  // --- FIX: DYNAMICALLY import and set the worker ---
   useEffect(() => {
-    GlobalWorkerOptions.workerSrc = `/pdf.worker.mjs`;
+    // This dynamically imports the 'pdfjs-dist' library
+    import('pdfjs-dist').then(pdfjs => {
+      // And *then* sets the worker source
+      pdfjs.GlobalWorkerOptions.workerSrc = `/pdf.worker.mjs`;
+    });
   }, []);
-  // ------------------------
+  // ----------------------------------------------------
 
   useEffect(() => {
     setInputWordCount(countWords(inputText));
@@ -95,6 +98,9 @@ export default function SummarizePage() {
     } else if (file.type === "application/pdf") {
       reader.onload = async () => {
         try {
+          // --- FIX: DYNAMICALLY import getDocument ---
+          const { getDocument } = await import('pdfjs-dist');
+          
           const arrayBuffer = reader.result as ArrayBuffer;
           const pdf = await getDocument({ data: arrayBuffer }).promise;
           let fullText = '';
@@ -327,7 +333,7 @@ export default function SummarizePage() {
             {...getRootProps()} 
             className={`border-2 border-dashed border-neutral-300 rounded-lg p-8 text-center cursor-pointer hover:border-primary transition-colors
               ${isDragActive ? 'bg-primary/10 border-primary' : 'bg-neutral-50'}
-              ${(isLoading || isUploading)? 'opacity-50 cursor-not-allowed' : ''}
+              ${(isLoading || isUploading) ? 'opacity-50 cursor-not-allowed' : ''}
             `}
           >
             <input {...getInputProps()} />
