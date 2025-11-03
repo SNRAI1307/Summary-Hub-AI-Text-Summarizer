@@ -1,0 +1,35 @@
+envVarGroups:
+  - name: summary-hub-secrets
+    fromExisting: true
+
+services:
+  # 2. The Backend API (Web Service)
+  - type: web
+    name: backend-api
+    plan: free # Use the free plan
+    autoDeploy: true # Automatically deploy on push to 'main'
+    env: node
+    rootDir: ./backend # Tell Render to look in the 'backend' folder
+    buildFilter:
+      paths:
+        - backend/** # Only rebuild if 'backend' files change
+    buildCommand: npm install && npx sequelize-cli db:migrate
+    startCommand: npm start
+    envVarGroups:
+      - summary-hub-secrets # Link the shared secrets
+    healthCheckPath: /health # Use your health route
+
+  # 3. The Backend Worker
+  - type: worker
+    name: backend-worker
+    plan: free # Use the free plan
+    autoDeploy: true
+    env: node
+    rootDir: ./backend
+    buildFilter:
+      paths:
+        - backend/**
+    buildCommand: npm install
+    startCommand: npm run worker
+    envVarGroups:
+      - summary-hub-secrets # Link the shared secrets
