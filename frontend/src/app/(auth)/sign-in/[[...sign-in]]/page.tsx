@@ -1,6 +1,6 @@
 import { SignIn } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
-import { TestimonialSlider } from "@/components/TestimonialSlider";
+import { TestimonialSlider } from "../../../../components/TestimonialSlider";
 
 export default function SignInPage() {
   return (
