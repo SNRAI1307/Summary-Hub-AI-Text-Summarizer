@@ -12,8 +12,7 @@ import { useDropzone } from 'react-dropzone';
 import { GlobalWorkerOptions, getDocument } from 'pdfjs-dist';
 import { useToast } from "@/hooks/use-toast"; 
 
-// 2. Point to the local worker file in your /public folder
-GlobalWorkerOptions.workerSrc = `/pdf.worker.mjs`;
+
 
 const countWords = (text: string) => {
   if (!text.trim()) return 0;
@@ -51,7 +50,14 @@ export default function SummarizePage() {
   const [outputWordCount, setOutputWordCount] = useState(0);
   
   const { getToken } = useAuth();
-  const { toast } = useToast(); // 4. Initialize useToast
+  const { toast } = useToast(); 
+
+  // --- THIS IS THE FIX ---
+  // We move the worker setup into useEffect so it only runs on the client.
+  useEffect(() => {
+    GlobalWorkerOptions.workerSrc = `/pdf.worker.mjs`;
+  }, []);
+  // ------------------------
 
   useEffect(() => {
     setInputWordCount(countWords(inputText));
@@ -223,11 +229,12 @@ export default function SummarizePage() {
   };
 
   return (
-    <div className="w-full max-w-6xl mx-auto px-4 py-8"> 
-      <div className="text-center mb-6"> {/* <-- FIX: Reduced margin-bottom */}
-        <p className="text-primary font-semibold text-white">AI Summarizing Tool:</p>
-        <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">Free Text Summary Generator</h1> {/* <-- FIX: Color is correct */}
-        <p className="text-lg text-neutral-300 max-w-2xl mx-auto"> {/* <-- FIX: Color is correct */}
+    // This wrapper is for your light-theme summarizer component
+    <div className="w-full max-w-4xl mx-auto">
+      <div className="text-center mb-8">
+        <p className="text-primary font-semibold">AI Summarizing Tool:</p>
+        <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">Free Text Summary Generator</h1>
+        <p className="text-lg text-neutral-300 max-w-2xl mx-auto">
           Simplify your content writing with our AI summarizer. Transform your sentences, paragraphs, and articles into digestible copy and summarize any text in one click.
         </p>
       </div>
@@ -320,7 +327,7 @@ export default function SummarizePage() {
             {...getRootProps()} 
             className={`border-2 border-dashed border-neutral-300 rounded-lg p-8 text-center cursor-pointer hover:border-primary transition-colors
               ${isDragActive ? 'bg-primary/10 border-primary' : 'bg-neutral-50'}
-              ${(isLoading || isUploading) ? 'opacity-50 cursor-not-allowed' : ''}
+              ${(isLoading || isUploading)? 'opacity-50 cursor-not-allowed' : ''}
             `}
           >
             <input {...getInputProps()} />
