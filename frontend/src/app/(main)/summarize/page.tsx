@@ -238,7 +238,7 @@ export default function SummarizePage() {
     // This wrapper is for your light-theme summarizer component
     <div className="w-full max-w-4xl mx-auto">
       <div className="text-center mb-8">
-        <p className="text-primary font-semibold">AI Summarizing Tool:</p>
+        <p className="text-primary font-semibold text-white">AI Summarizing Tool:</p>
         <h1 className="text-4xl md:text-5xl font-bold text-white mb-2">Free Text Summary Generator</h1>
         <p className="text-lg text-neutral-300 max-w-2xl mx-auto">
           Simplify your content writing with our AI summarizer. Transform your sentences, paragraphs, and articles into digestible copy and summarize any text in one click.
