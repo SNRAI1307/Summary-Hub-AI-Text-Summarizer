@@ -34,8 +34,8 @@ const HowItWorksSection = () => (
                 </div>
               </CardHeader>
               <CardContent className="flex items-center gap-4">
-                <div className="text-4xl font-bold text-neutral-600">1</div>
-                <div className="flex-1 border-t border-neutral-700"></div>
+                <div className="text-4xl font-bold text-neutral-600 text-white">1</div>
+                <div className="flex-1 border-t border-neutral-700 border-white"></div>
               </CardContent>
               <CardContent>
                 <CardTitle className="text-2xl font-semibold text-white mb-2">Sign Up</CardTitle>
@@ -45,7 +45,7 @@ const HowItWorksSection = () => (
               </CardContent>
               <CardFooter>
                 <Link href="/sign-up">
-                  <span className="text-primary font-semibold flex items-center cursor-pointer group">
+                  <span className="text-primary font-semibold flex items-center cursor-pointer group text-white">
                     Let&apos;s Do This
                     <ArrowRight className="w-4 h-4 ml-2 transition-transform duration-200 group-hover:translate-x-1" />
                   </span>
@@ -66,8 +66,8 @@ const HowItWorksSection = () => (
                 </div>
               </CardHeader>
               <CardContent className="flex items-center gap-4">
-                <div className="text-4xl font-bold text-neutral-600">2</div>
-                <div className="flex-1 border-t border-neutral-700"></div>
+                <div className="text-4xl font-bold text-neutral-600 text-white">2</div>
+                <div className="flex-1 border-t border-neutral-700 border-white"></div>
               </CardContent>
               <CardContent>
                 <CardTitle className="text-2xl font-semibold text-white mb-2">Choose Your Content</CardTitle>
@@ -77,7 +77,7 @@ const HowItWorksSection = () => (
               </CardContent>
               <CardFooter>
                 <Link href="/sign-up">
-                  <span className="text-primary font-semibold flex items-center cursor-pointer group">
+                  <span className="text-primary font-semibold flex items-center cursor-pointer group text-white">
                     Let&apos;s Do This
                     <ArrowRight className="w-4 h-4 ml-2 transition-transform duration-200 group-hover:translate-x-1" />
                   </span>
@@ -98,8 +98,8 @@ const HowItWorksSection = () => (
                 </div>
               </CardHeader>
               <CardContent className="flex items-center gap-4">
-                <div className="text-4xl font-bold text-neutral-600">3</div>
-                <div className="flex-1 border-t border-neutral-700"></div>
+                <div className="text-4xl font-bold text-neutral-600 text-white">3</div>
+                <div className="flex-1 border-t border-neutral-700 border-white"></div>
               </CardContent>
               <CardContent>
                 <CardTitle className="text-2xl font-semibold text-white mb-2">Summarize</CardTitle>
@@ -109,7 +109,7 @@ const HowItWorksSection = () => (
               </CardContent>
               <CardFooter>
                 <Link href="/sign-up">
-                  <span className="text-primary font-semibold flex items-center cursor-pointer group">
+                  <span className="text-primary font-semibold flex items-center cursor-pointer group text-white">
                     Let&apos;s Do This
                     <ArrowRight className="w-4 h-4 ml-2 transition-transform duration-200 group-hover:translate-x-1" />
                   </span>
@@ -195,7 +195,7 @@ const FeaturesSection = () => (
         <CardContent className="pt-12">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div>
-              <span className="text-primary font-semibold mb-2 block">Features</span>
+              <span className="text-primary font-semibold mb-2 block text-white">Features</span>
               <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">Summarize Any Text Instantly With High Accuracy</h2>
               <p className="text-lg text-neutral-300 mb-6">Upload your own text files or provide text to get instant insights with high accuracy. Whether for research, exam prep, or just daily reading, our tool can handle it all.</p>
               <ul className="space-y-3 text-neutral-300">
