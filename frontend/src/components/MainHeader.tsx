@@ -31,58 +31,54 @@ export function MainHeader() {
     <header className="bg-black/20 backdrop-blur-sm border-b border-white/10 sticky top-0 z-50">
       <nav className="container mx-auto flex justify-between items-center p-4 h-16">
         
-        {/* Left: Logo & Brand */}
-        <Link href="/" className="flex items-center gap-2 hover:opacity-80 transition duration-200">
-          <Image
-            src="/logo.png"
-            alt="Summary Hub Logo"
-            width={32}
-            height={32}
-            className="rounded-md"
-          />
-          <span className="text-2xl font-bold text-white">
-            Summary Hub
-          </span>
-        </Link>
+        {/* Logo */}
+        <div className="flex-shrink-0">
+          <Link href="/" className="flex items-center gap-2">
+            <Image
+              src="/logo.png"
+              alt="Summary Hub Logo"
+              width={32}
+              height={32}
+              className="rounded-md"
+            />
+            <span className="text-xl font-bold text-white hidden sm:inline-block">
+              Summary Hub
+            </span>
+          </Link>
+        </div>
 
-        {/* Middle: Nav Links (Only for logged-in users) */}
-        <SignedIn>
-          <div className="hidden md:flex items-center gap-2 bg-neutral-800/50 p-1 rounded-lg border border-neutral-700">
-            {navLinks.map((link) => {
-              const isActive = pathname === link.href;
-              return (
-                <Link key={link.href} href={link.href}>
-                  <span className={`
-                    px-4 py-1.5 rounded-md text-sm font-medium transition-colors
-                    ${isActive 
-                      ? 'bg-primary text-white' 
-                      : 'text-neutral-300 hover:bg-neutral-700/50 hover:text-white'}
-                  `}>
-                    {link.label}
-                  </span>
-                </Link>
-              );
-            })}
-          </div>
-        </SignedIn>
+        
+        <div className="hidden sm:flex items-center gap-4">
+          <SignedIn>
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`text-sm font-medium transition-colors ${
+                  pathname === link.href
+                    ? "text-white"
+                    : "text-neutral-400 hover:text-white"
+                }`}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </SignedIn>
+        </div>
 
-        {/* Right: Auth Controls */}
-        <div className="flex items-center space-x-3">
+        
+        <div className="flex items-center gap-4">
           <SignedOut>
-            <Link href="/sign-in">
-              <button className="px-4 py-2 text-sm font-medium text-white border border-white/50 rounded-md hover:bg-white/10 transition duration-200">
-                Log In
-              </button>
-            </Link>
-            <Link href="/sign-up">
-               <button className="px-4 py-2 text-sm font-medium text-gray-900 bg-white rounded-md hover:bg-gray-200 transition duration-200">
-                Get Started
-              </button>
-            </Link>
+            <Button variant="ghost" className="text-white hover:bg-white/10" asChild>
+              <Link href="/sign-in">Login</Link>
+            </Button>
+            <Button className="bg-primary text-primary-foreground hover:bg-primary/90" asChild>
+              <Link href="/sign-up">Sign Up</Link>
+            </Button>
           </SignedOut>
           
           <SignedIn>
-            {/* Custom User Info Display */}
+            {/* Desktop User Info & Logout */}
             <div className="hidden sm:flex items-center gap-3">
               <Avatar className="w-8 h-8">
                 <AvatarImage src={user?.imageUrl} alt={user?.fullName || 'User'} />
@@ -107,15 +103,39 @@ export function MainHeader() {
               </Button>
             </div>
             
-            {/* Fallback for very small screens (mobile) */}
-            <div className="sm:hidden">
-              <Link href="/dashboard" className="text-gray-200 hover:text-white transition duration-200 font-medium text-sm">
-                Dashboard
-              </Link>
+            {/* Mobile Nav Links & Logout */}
+            <div className="sm:hidden flex items-center gap-3">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`text-sm font-medium transition-colors ${
+                    pathname === link.href
+                      ? "text-white"
+                      : "text-neutral-400 hover:text-white"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              ))}
+              <Button 
+                variant="destructive" 
+                size="icon"
+                className="w-8 h-8"
+                onClick={() => signOut({ redirectUrl: '/' })}
+              >
+                <Avatar className="w-6 h-6">
+                  <AvatarImage src={user?.imageUrl} alt={user?.fullName || 'User'} />
+                  <AvatarFallback className="bg-transparent text-white font-semibold">
+                    {getInitials(user?.fullName)}
+                  </AvatarFallback>
+                </Avatar>
+              </Button>
             </div>
 
           </SignedIn>
         </div>
+        
       </nav>
     </header>
   );

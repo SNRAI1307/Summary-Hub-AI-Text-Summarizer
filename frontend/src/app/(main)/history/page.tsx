@@ -23,9 +23,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Clock, Trash2 } from 'lucide-react'; // Removed AlertTriangle
+import { Loader2, Clock, Trash2 } from 'lucide-react';
 
-// Define the types (already in your file)
 interface Article {
   id: number;
   url: string;
@@ -48,7 +47,6 @@ export default function HistoryPage() {
   const { getToken } = useAuth();
   const { toast } = useToast();
 
-  // --- Data Fetching ---
   useEffect(() => {
     const fetchSummaries = async () => {
       setIsLoading(true);
@@ -79,7 +77,6 @@ export default function HistoryPage() {
     fetchSummaries();
   }, [getToken, toast]);
 
-  // --- Selection Logic ---
   const handleSelect = (id: number) => {
     setSelectedIds((prev) =>
       prev.includes(id) ? prev.filter((sId) => sId !== id) : [...prev, id]
@@ -87,7 +84,7 @@ export default function HistoryPage() {
   };
 
   const handleSelectAll = (checked: boolean | 'indeterminate') => {
-    if (checked) {
+    if (checked === true) {
       setSelectedIds(summaries.map((s) => s.id));
     } else {
       setSelectedIds([]);
@@ -97,7 +94,6 @@ export default function HistoryPage() {
   const isAllSelected = summaries.length > 0 && selectedIds.length === summaries.length;
   const isSomeSelected = selectedIds.length > 0 && selectedIds.length < summaries.length;
 
-  // --- Delete Logic ---
   const handleDeleteSelected = async () => {
     setIsDeleting('selected');
     try {
@@ -150,7 +146,6 @@ export default function HistoryPage() {
     }
   };
 
-  // --- Helper Functions ---
   const formatContent = (content: string) => {
     return content.split('\n').map((line, index) => (
       <span key={index} className="block mb-2">
@@ -169,25 +164,25 @@ export default function HistoryPage() {
     });
   };
 
-  // --- Render ---
   return (
     <div className="container mx-auto max-w-4xl py-12">
       <Card className="bg-white/5 border-white/10 text-white">
         <CardHeader>
-          <div className="flex justify-between items-center mb-4">
+          {/* --- MODIFIED SECTION --- */}
+          <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-4 gap-4">
             <CardTitle className="text-3xl font-bold">Summary History</CardTitle>
             
-            {/* --- Delete Buttons --- */}
+            {/* --- FIX: Added flex-wrap and justify-end --- */}
             {summaries.length > 0 && (
-              <div className="flex gap-2">
+              <div className="flex flex-wrap sm:flex-nowrap gap-2 justify-end">
                 
-                {/* --- Delete Selected Button & Dialog --- */}
+                {/* Delete Selected Button & Dialog */}
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <Button 
                       variant="secondary"
                       disabled={selectedIds.length === 0 || !!isDeleting}
-                      className="w-32" // Added fixed width
+                      className="w-full sm:w-32" // Full width on mobile
                     >
                       {isDeleting === 'selected' ? (
                         <>
@@ -223,12 +218,12 @@ export default function HistoryPage() {
                   </AlertDialogContent>
                 </AlertDialog>
 
-                {/* --- Delete All Button & Dialog --- */}
+                {/* Delete All Button & Dialog */}
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <Button 
                       variant="outline"
-                      className="text-destructive border-destructive/50 hover:bg-destructive/10 hover:text-destructive w-32" // Added fixed width
+                      className="text-destructive border-destructive/50 hover:bg-destructive/10 hover:text-destructive w-full sm:w-32" // Full width on mobile
                       disabled={!!isDeleting}
                     >
                       {isDeleting === 'all' ? (
@@ -237,7 +232,7 @@ export default function HistoryPage() {
                           Deleting...
                         </>
                       ) : (
-                        "Delete All" // No icon
+                        "Delete All"
                       )}
                     </Button>
                   </AlertDialogTrigger>
@@ -264,16 +259,16 @@ export default function HistoryPage() {
               </div>
             )}
           </div>
+          {/* --- END OF MODIFIED SECTION --- */}
 
-          {/* --- Select All Checkbox --- */}
           {summaries.length > 0 && (
             <div 
-              className="flex items-center space-x-2 p-4 border-b border-white/20 hover:bg-white/5 transition-colors rounded-t-lg" // <-- FIX: Added hover
+              className="flex items-center space-x-2 p-4 border-b border-white/20 hover:bg-white/5 transition-colors rounded-t-lg"
             >
               <Checkbox
                 id="select-all"
                 checked={isAllSelected || (isSomeSelected ? 'indeterminate' : false)}
-                onCheckedChange={handleSelectAll}
+                onCheckedChange={(checked) => handleSelectAll(checked)}
                 aria-label="Select all summaries"
               />
               <label
@@ -299,12 +294,11 @@ export default function HistoryPage() {
                 <AccordionItem 
                   key={summary.id} 
                   value={`item-${summary.id}`} 
-                  className="border-white/20" // <-- Removed hover from here
+                  className="border-white/20"
                 >
                   <div 
-                    className="flex items-center w-full group hover:bg-white/5 rounded-lg transition-colors" // <-- FIX: Added hover here
+                    className="flex items-center w-full group hover:bg-white/5 rounded-lg transition-colors"
                   >
-                    {/* --- Individual Checkbox --- */}
                     <div className="pl-4 py-4">
                       <Checkbox
                         id={`select-${summary.id}`}
@@ -314,7 +308,6 @@ export default function HistoryPage() {
                       />
                     </div>
                     
-                    {/* --- Accordion Trigger --- */}
                     <AccordionTrigger className="flex-1 py-4 text-white hover:no-underline pl-3">
                       <div className="flex-1 text-left">
                         <p className={`text-lg font-semibold group-hover:text-primary transition-colors ${selectedIds.includes(summary.id) ? 'text-primary' : ''}`}>
@@ -328,7 +321,6 @@ export default function HistoryPage() {
                     </AccordionTrigger>
                   </div>
                   <AccordionContent>
-                    {/* --- Content (add padding to align with checkbox) --- */}
                     <div className="prose prose-invert max-w-none text-neutral-300 pl-11 pr-4">
                       {formatContent(summary.content)}
                     </div>
